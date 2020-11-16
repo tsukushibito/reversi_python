@@ -8,6 +8,7 @@ RUN pip install --upgrade pipenv
 RUN pip install --upgrade pylint
 RUN pip install --upgrade pytest
 RUN pip install --upgrade autopep8
+RUN pip install --upgrade rope
 
-ENV PYTHONPATH "${PYTHONPATH}:/work"
+# ENV PYTHONPATH "${PYTHONPATH}:/work"
 # ENV PIPENV_VENV_IN_PROJECT 1

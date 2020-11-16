@@ -1,7 +1,12 @@
 {
 	"folders": [
 		{
+			"name": "workspace",
 			"path": "."
+		},
+		{
+			"name": "work",
+			"path": "./work"
 		}
 	],
 	"settings": {}
