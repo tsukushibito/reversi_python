@@ -1,5 +1,6 @@
 {
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.pythonPath": "/root/.local/share/virtualenvs/work-X9lCidPw/bin/python"
 }

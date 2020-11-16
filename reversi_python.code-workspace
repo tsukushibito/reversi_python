@@ -9,5 +9,7 @@
 			"path": "./work"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.venvPath": "/root/.local/share/virtualenvs"
+	}
 }
