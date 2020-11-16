@@ -38,8 +38,6 @@ class Board:
     def __init__(self):
         self.__squares = [[Square.EMPTY] * 8 for i in range(8)]
         self.initialize()
-        string = repr(self.__squares)
-        print(string)
 
     @property
     def squares(self) -> list[list[Square]]:
@@ -70,6 +68,14 @@ class Board:
         for row in self.__squares:
             score += row.count(Square.BLACK)
         return score
+
+    @property
+    def has_valid_move(self) -> bool:
+        for r in range(8):
+            for c in range(8):
+                if self.is_playable(r, c):
+                    return True
+        return False
 
     def initialize(self):
 
@@ -126,9 +132,26 @@ class Board:
                 r_it += d[1]
                 c_it += d[0]
 
-        self.__current_player = Player.WHITE if self.current_player == Player.BLACK else Player.WHITE
-
         return True
 
+    def change_current_player(self):
+        self.__current_player = Player.WHITE if self.current_player == Player.BLACK else Player.BLACK
+
     def to_string(self) -> str:
-        pass
+        string = f'Current Player: {self.current_player} \n'
+        string += f'Black: {self.black_score} \n'
+        string += f'White: {self.white_score} \n'
+        string += '   |-A-|-B-|-C-|-D-|-E-|-F-|-G-|-H-|\n'
+        for i, row, in enumerate(self.__squares):
+            string += f' {i + 1} |'
+            for square in row:
+                s = ''
+                if square == Square.WHITE:
+                    s += ' ○  '
+                elif square == Square.BLACK:
+                    s += ' ●  '
+                elif square == Square.EMPTY:
+                    s += '    '
+                string += s
+            string += '\n'
+        return string

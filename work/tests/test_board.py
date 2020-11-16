@@ -40,6 +40,7 @@ def test_play():
 
     board.play(4, 2)
     squares = board.squares
+    print(board)
     assert squares[4][2] == squares[3][3] == squares[4][3] == squares[4][4] == Square.BLACK
     assert squares[3][4] == Square.WHITE
 

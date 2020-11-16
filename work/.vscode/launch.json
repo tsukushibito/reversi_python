@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: モジュール",
+            "type": "python",
+            "request": "launch",
+            "module": "reversi"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
