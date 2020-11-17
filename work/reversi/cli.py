@@ -4,14 +4,14 @@ def main() -> None:
     reversi = Reversi()
 
     while not reversi.is_end:
-        print(reversi.board_string)
+        print(reversi.to_string())
         print('石を置く位置を入力してください')
         r, c = receive_input()
-        while not reversi.receive_input(r, c):
+        while not reversi.play(r, c):
             print('そこには置けないよ')
             r, c = receive_input()
 
-    print(reversi.board_string)
+    print(reversi.to_string())
 
 
 def receive_input() -> (int, int):
