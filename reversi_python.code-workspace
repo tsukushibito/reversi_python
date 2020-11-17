@@ -11,6 +11,6 @@
 	],
 	"settings": {
 		"python.venvPath": "/root/.local/share/virtualenvs",
-		"python.pythonPath": "/root/.local/share/virtualenvs/work-X9lCidPw/bin/python"
+		"python.pythonPath": "/usr/local/bin/python"
 	}
 }

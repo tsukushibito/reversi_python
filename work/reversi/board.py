@@ -70,12 +70,40 @@ class Board:
         return score
 
     @property
-    def has_valid_move(self) -> bool:
+    def playable_positions(self) -> list[(int, int)]:
+        ps = []
         for r in range(8):
             for c in range(8):
                 if self.is_playable(r, c):
-                    return True
-        return False
+                    ps.append((r, c))
+
+        return ps
+
+    @property
+    def empty_positions(self) -> list[(int, int)]:
+        ps = []
+        for r in range(8):
+            for c in range(8):
+                if self.__squares[r][c] == Square.EMPTY:
+                    ps.append((r, c))
+
+    @property
+    def black_positions(self) -> list[(int, int)]:
+        ps = []
+        for r in range(8):
+            for c in range(8):
+                if self.__squares[r][c] == Square.BLACK:
+                    ps.append((r, c))
+
+        return ps
+
+    @property
+    def white_positions(self) -> list[(int, int)]:
+        ps = []
+        for r in range(8):
+            for c in range(8):
+                if self.__squares[r][c] == Square.WHITE:
+                    ps.append((r, c))
 
     def initialize(self):
 
