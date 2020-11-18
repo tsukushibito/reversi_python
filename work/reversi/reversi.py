@@ -65,30 +65,31 @@ class Reversi:
         return dr if dr > 0 else dc
 
     def __init__(self):
-        self.__board = [[Square.EMPTY] * 8 for i in range(8)]
-        self.__has_passed = False
-        self.__is_end = False
+        self._board = [[Square.EMPTY] * 8 for i in range(8)]
+        self._has_passed = False
+        self._is_end = False
+        self._current_player = Player.BLACK
         self.initialize()
 
     @property
     def is_end(self):
         'ゲームが終了した状態か'
-        return self.__is_end
+        return self._is_end
 
     @property
     def has_passed(self):
         'パスされたか'
-        return self.__has_passed
+        return self._has_passed
 
     @property
     def board(self) -> list[list[Square]]:
         'ボード（ディープコピーを返します）'
-        return deepcopy(self.__board)
+        return deepcopy(self._board)
 
     @property
     def current_player(self) -> Player:
         '現在のプレイヤー'
-        return self.__current_player
+        return self._current_player
 
     @property
     def current_player_square(self) -> Square:
@@ -104,7 +105,7 @@ class Reversi:
     def white_score(self) -> int:
         '白のスコア'
         score = 0
-        for row in self.__board:
+        for row in self._board:
             score += row.count(Square.WHITE)
         return score
 
@@ -112,7 +113,7 @@ class Reversi:
     def black_score(self) -> int:
         '黒のスコア'
         score = 0
-        for row in self.__board:
+        for row in self._board:
             score += row.count(Square.BLACK)
         return score
 
@@ -141,7 +142,7 @@ class Reversi:
         ps = []
         for r in range(8):
             for c in range(8):
-                if self.__board[r][c] == Square.EMPTY:
+                if self._board[r][c] == Square.EMPTY:
                     ps.append((r, c))
 
         return ps
@@ -156,7 +157,7 @@ class Reversi:
         ps = []
         for r in range(8):
             for c in range(8):
-                if self.__board[r][c] == Square.BLACK:
+                if self._board[r][c] == Square.BLACK:
                     ps.append((r, c))
 
         return ps
@@ -171,27 +172,27 @@ class Reversi:
         ps = []
         for r in range(8):
             for c in range(8):
-                if self.__board[r][c] == Square.WHITE:
+                if self._board[r][c] == Square.WHITE:
                     ps.append((r, c))
 
     def initialize(self):
         '初期化'
-        self.__has_passed = False
-        self.__is_end = False
+        self._has_passed = False
+        self._is_end = False
 
         # 一度空で埋める
-        for row in self.__board:
+        for row in self._board:
             for i, _ in enumerate(row):
                 row[i] = Square.EMPTY
 
         # 初期配置
-        self.__board[3][3] = Square.BLACK
-        self.__board[4][4] = Square.BLACK
-        self.__board[3][4] = Square.WHITE
-        self.__board[4][3] = Square.WHITE
+        self._board[3][3] = Square.BLACK
+        self._board[4][4] = Square.BLACK
+        self._board[3][4] = Square.WHITE
+        self._board[4][3] = Square.WHITE
 
         # 先手は黒
-        self.__current_player = Player.BLACK
+        self._current_player = Player.BLACK
 
     def is_playable(self, row: int, col: int, out_playable_dirs: list = None) -> bool:
         """配置可能かどうか
@@ -207,7 +208,7 @@ class Reversi:
         if not Reversi.is_valid_position(row, col):
             return False
 
-        if self.__board[row][col] != Square.EMPTY:
+        if self._board[row][col] != Square.EMPTY:
             return False
 
         playable = False
@@ -221,14 +222,14 @@ class Reversi:
 
             # 相手の石が置かれていないorボード外になるまでずらしていく
             while Reversi.is_valid_position(r_it, c_it) \
-                    and self.__board[r_it][c_it] == self.opposing_square:
+                    and self._board[r_it][c_it] == self.opposing_square:
                 r_it += d[1]
                 c_it += d[0]
 
             # ずらされた位置がボード内and自分の石and距離が1より大きいならば、配置可能
             if Reversi.is_valid_position(r_it, c_it) \
                     and Reversi.distance(row, col, r_it, c_it) > 1\
-                    and self.__board[r_it][c_it] == self.current_player_square:
+                    and self._board[r_it][c_it] == self.current_player_square:
                 playable = True
                 # 出力引数があれば判定している方向を追加
                 if out_playable_dirs != None:
@@ -254,32 +255,32 @@ class Reversi:
             return False
 
         # 配置
-        self.__board[row][col] = self.current_player_square
+        self._board[row][col] = self.current_player_square
 
         # 反転
         for dir in playable_dirs:
             d = dir.value
             r_it = row + d[1]
             c_it = col + d[0]
-            while self.__board[r_it][c_it] == self.opposing_square:
-                self.__board[r_it][c_it] = self.current_player_square
+            while self._board[r_it][c_it] == self.opposing_square:
+                self._board[r_it][c_it] = self.current_player_square
                 r_it += d[1]
                 c_it += d[0]
 
         # プレイヤー交代
-        self.__change_current_player()
+        self._change_current_player()
 
         if len(self.playable_positions) > 0:
             # 配置可能な場所があればそのまま継続
-            self.__has_passed = False
-            self.__is_end = False
+            self._has_passed = False
+            self._is_end = False
         else:
             # 配置可能な場所がないので再度プレイヤーを交代しパスフラグをTrueにする
-            self.__change_current_player()
-            self.__has_passed = True
+            self._change_current_player()
+            self._has_passed = True
             if len(self.playable_positions) == 0:
                 # 交代後も配置可能な場所がなければ両者とも配置不可能なのでゲーム終了
-                self.__is_end = True
+                self._is_end = True
 
         return True
 
@@ -293,7 +294,7 @@ class Reversi:
         string += f'Black: {self.black_score} \n'
         string += f'White: {self.white_score} \n'
         string += '   |-A-|-B-|-C-|-D-|-E-|-F-|-G-|-H-|\n'
-        for i, row, in enumerate(self.__board):
+        for i, row, in enumerate(self._board):
             string += f' {i + 1} |'
             for square in row:
                 s = ''
@@ -307,5 +308,5 @@ class Reversi:
             string += '\n'
         return string
 
-    def __change_current_player(self):
-        self.__current_player = Player.WHITE if self.current_player == Player.BLACK else Player.BLACK
+    def _change_current_player(self):
+        self._current_player = Player.WHITE if self.current_player == Player.BLACK else Player.BLACK
